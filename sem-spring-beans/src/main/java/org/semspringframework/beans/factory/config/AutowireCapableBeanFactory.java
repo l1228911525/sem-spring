@@ -1,6 +1,6 @@
 package org.semspringframework.beans.factory.config;
 
-import org.springframework.beans.factory.config.BeanDefinition;
+import org.semspringframework.beans.factory.support.BeanDefinition;
 
 /**
  * a class implement the interface surface the class hold the ability of DI(Dependency injection).

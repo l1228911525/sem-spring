@@ -1,10 +1,12 @@
 package org.semspringframework.beans.factory;
 
-public class Test {
+import java.lang.reflect.Constructor;
+
+public class Demo {
 
     private String name;
 
-    public Test(String name) {
+    public Demo(String name) {
         this.name = name;
     }
 
@@ -15,4 +17,9 @@ public class Test {
     public void setName(String name) {
         this.name = name;
     }
+
+    public static void main(String[] args) {
+        
+    }
+
 }

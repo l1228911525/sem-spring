@@ -53,7 +53,12 @@ public class SingletonRegistrySupport implements SingletonRegistry {
     }
 
     @Override
-    public void getSingleton(String beanName, ObjectFactory objectFactory) {
+    public Object getSingleton(String beanName, ObjectFactory objectFactory) {
+        Object object = objectFactory.getObject();
+
+        registerSingleton(beanName, object);
+
+        return object;
     }
 
     @Override

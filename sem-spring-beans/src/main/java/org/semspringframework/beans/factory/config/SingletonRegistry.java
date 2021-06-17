@@ -35,7 +35,7 @@ public interface SingletonRegistry {
     /**
      * get singleton object by {@param objectFactory} that create singleton bean and {@param beanName}
      */
-    public void getSingleton(String beanName, ObjectFactory objectFactory);
+    public Object getSingleton(String beanName, ObjectFactory objectFactory);
 
     /**
      * register singletonFactory that create singleton by {@param beanName} and the {@param objectFactory}

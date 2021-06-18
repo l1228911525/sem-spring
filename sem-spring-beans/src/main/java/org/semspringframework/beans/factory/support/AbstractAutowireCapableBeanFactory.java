@@ -4,12 +4,17 @@ import org.semspringframework.beans.factory.config.AutowireCapableBeanFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory implements AutowireCapableBeanFactory {
 
+    /**
+     * DI(Dependency injection) in invoking constructor
+     */
     @Override
     public Object autowireBeanByConstructor(BeanDefinition beanDefinition) {
 
@@ -46,9 +51,58 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
     }
 
+    /**
+     * DI(Dependency injection) using set method of target
+     */
     @Override
-    public Object autowireBeanBySet(BeanDefinition beanDefinition, Object object) {
-        return object;
+    public Object autowireBeanBySet(BeanDefinition beanDefinition, Object target) {
+
+        Object parameterObject = null;
+
+        String setMethodName = null;
+
+        HashMap<String, Object> setParam = beanDefinition.getSetParam();
+
+        if(setParam == null)
+            return target;
+
+        Set<String> keySet = setParam.keySet();
+
+        for (String key : keySet) {
+
+            Object param = setParam.get(key);
+
+            if(param instanceof RefType) {
+
+                parameterObject = getBean(((RefType) param).getRefName());
+
+            }
+
+            else{
+                parameterObject = param;
+            }
+
+            setMethodName = "set" + key.substring(0, 1).toUpperCase() + key.substring(1);
+
+            try {
+                Method method = beanDefinition.getBeanClass().getDeclaredMethod(setMethodName, parameterObject.getClass());
+
+                method.invoke(target, parameterObject);
+
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+                throw new IllegalStateException("fail to invoke the method named "+setMethodName+" of target");
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+                throw new IllegalStateException("fail to invoke the method named "+setMethodName+" of target");
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+                throw new IllegalStateException("fail to invoke the method named "+setMethodName+" of target");
+            }
+
+        }
+
+        return target;
     }
 
     @Override

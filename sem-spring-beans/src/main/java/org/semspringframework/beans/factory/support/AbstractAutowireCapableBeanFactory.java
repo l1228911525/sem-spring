@@ -27,7 +27,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         // the HashMap'content is the parameter of constructor
         HashMap<String, Object> initParam = beanDefinition.getInitParam();
 
-        List<Object> objectList = new LinkedList<>();
+        List<Object> objectList = new LinkedList<Object>();
 
         for (String parameterName : constructorParameter) {
 

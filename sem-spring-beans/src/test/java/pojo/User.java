@@ -1,4 +1,4 @@
-package org.semspringframework.beans.factory.pojo;
+package pojo;
 
 public class User {
 

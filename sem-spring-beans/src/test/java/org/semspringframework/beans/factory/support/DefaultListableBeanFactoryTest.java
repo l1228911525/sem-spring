@@ -2,9 +2,14 @@ package org.semspringframework.beans.factory.support;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.semspringframework.beans.factory.pojo.Person;
-import org.semspringframework.beans.factory.pojo.User;
+import org.springframework.core.io.ClassPathResource;
+import pojo.Person;
+import pojo.User;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 
 public class DefaultListableBeanFactoryTest {
@@ -69,6 +74,16 @@ public class DefaultListableBeanFactoryTest {
         System.out.println(person);
     }
 
+    @Test
+    public void test1() throws IOException {
+        ClassPathResource resource = new ClassPathResource("springspring.xml");
 
+        String filename = resource.getFilename();
+
+        InputStream inputStream = resource.getInputStream();
+
+        System.out.println(inputStream instanceof FileInputStream);
+
+    }
 
 }

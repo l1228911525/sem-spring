@@ -16,7 +16,7 @@ public class DocumentTest {
 
 
 
-        FileInputStream inputStream = new FileInputStream("E:\\编程相关_廖启育\\code\\github\\sem-spring\\sem-spring-beans\\src\\main\\resources\\springspring.xml");
+        FileInputStream inputStream = new FileInputStream("/Users/lqyyy/Desktop/permanent/code/github/sem-spring/sem-spring-beans/src/main/resources/springspring.xml");
 
         //创建一个DocumentBuilderFactory的对象
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -27,18 +27,22 @@ public class DocumentTest {
             //通过DocumentBuilder对象的parser方法加载books.xml文件到当前项目下
             Document document = db.parse(inputStream);
 
-
-            NamedNodeMap attributes = document.getAttributes();
-
             Element documentElement = document.getDocumentElement();
 
             NodeList bean = documentElement.getElementsByTagName("bean");
 
             Node item = bean.item(0);
 
+            NamedNodeMap attributes = item.getAttributes();
 
+            System.out.println(attributes);
 
+            for(int i = 0; i < attributes.getLength(); ++i) {
+                Node item1 = attributes.item(i);
 
+                System.out.println(item1.getNodeName());
+                System.out.println(item1.getNodeValue());
+            }
 
 
         } catch (ParserConfigurationException e) {

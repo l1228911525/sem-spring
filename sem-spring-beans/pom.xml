@@ -10,11 +10,29 @@
     <build>
         <plugins>
             <plugin>
+                <artifactId/>
+                <executions>
+                    <execution>
+                        <id>name</id>
+                        <configuration>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                            <source>9</source>
+                            <target>9</target>
+                            <compilerArgs>
+                                <arg>-parameters</arg>
+                            </compilerArgs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>6</source>
-                    <target>6</target>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
         </plugins>

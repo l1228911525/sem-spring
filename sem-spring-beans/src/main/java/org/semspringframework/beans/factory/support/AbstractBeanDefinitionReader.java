@@ -59,6 +59,6 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
         }
     }
 
-    public abstract void doLoadBeanDefinition(InputStream inputStream);
+    protected abstract void doLoadBeanDefinition(InputStream inputStream);
 
 }

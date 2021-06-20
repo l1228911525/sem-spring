@@ -1,5 +1,7 @@
 package org.semspringframework.beans.factory.xml;
 
+import org.semspringframework.beans.factory.config.BeanDefinitionRegistry;
+import org.semspringframework.beans.factory.parsing.ConstructorParsing;
 import org.semspringframework.beans.factory.parsing.DocumentParsing;
 import org.semspringframework.beans.factory.support.AbstractBeanDefinitionReader;
 import org.semspringframework.beans.factory.support.BeanDefinition;
@@ -14,6 +16,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,11 +28,18 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
     private final String PROPERTY = "property";
 
+    public XmlBeanDefinitionReader() {
+    }
+
+    public XmlBeanDefinitionReader(BeanDefinitionRegistry beanDefinitionRegistry) {
+        super(beanDefinitionRegistry);
+    }
+
     /**
      * loading inputstream of the xml file， return all beandefinition of the xml file
      */
     @Override
-    public void doLoadBeanDefinition(InputStream inputStream) {
+    protected void doLoadBeanDefinition(InputStream inputStream) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
         try {
@@ -42,6 +52,10 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
             List<Node> nodeList = DocumentParsing.getNodeListByElement(rootElement, new String[]{"bean"});
 
+            for (Node node : nodeList) {
+                BeanDefinition beanDefinition = getBeanDefinition(node);
+                registerBeanDefinitionToBeanfactory(beanDefinition);
+            }
 
 
         } catch (ParserConfigurationException e) {
@@ -55,6 +69,10 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             System.out.println("fail to parse document");
         }
     }
+
+    /**
+     * get beandefinition according to the node of bean
+     */
 
     public BeanDefinition getBeanDefinition(Node node) {
 
@@ -95,8 +113,23 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                 beanDefinition.getSetParam().put(name, paramObject);
         }
 
-        return null;
+        String[] parameterName = ConstructorParsing.getParameterName(beanDefinition);
 
+        beanDefinition.setConstructorParameter(parameterName);
+
+        Constructor<?> constructor = ConstructorParsing.getConstructor(beanDefinition);
+
+        beanDefinition.setBeanConstructor(constructor);
+
+        return beanDefinition;
+
+    }
+
+    /**
+     * register BeanDefinition into BeanFactory
+     */
+    public void registerBeanDefinitionToBeanfactory(BeanDefinition beanDefinition) {
+        getBeanDefinitionRegistry().registerBeanDefinition(beanDefinition.getBeanName(), beanDefinition);
     }
 
 }

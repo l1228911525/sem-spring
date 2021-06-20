@@ -28,6 +28,14 @@ public class BeanDefinition {
 
     private HashMap<String, Object> setParam;
 
+    public BeanDefinition() {
+
+        initParam = new HashMap<>();
+
+        setParam = new HashMap<>();
+
+    }
+
     public String getBeanName() {
         return beanName;
     }

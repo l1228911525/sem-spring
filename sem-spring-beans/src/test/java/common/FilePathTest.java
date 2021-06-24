@@ -1,12 +1,8 @@
 package common;
 
-import org.semspringframework.beans.factory.Demo;
-import org.semspringframework.beans.factory.support.RefType;
 import org.springframework.core.io.*;
 
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class FilePathTest {
     public static void main(String[] args) throws IOException {

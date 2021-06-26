@@ -1,5 +1,8 @@
 package org.semspringframework.beans.propertyedit;
 
+/**
+ * edit the property of type boolean
+ */
 public class BooleanPropertyEdit extends AbstractPropertyEdit {
 
     @Override
@@ -13,15 +16,14 @@ public class BooleanPropertyEdit extends AbstractPropertyEdit {
 
     @Override
     public String getAsText() {
-        return super.getAsText();
+        return getValue().toString();
     }
 
     public Boolean encodeStr(String booleanStr) {
-        if("true".equals(booleanStr))
-            return true;
-        else if("false".equals(booleanStr))
+        if("false".equals(booleanStr) || "0".equals(booleanStr))
             return false;
-        throw new IllegalStateException("booleanStr: "+booleanStr+" isn't true or false");
+        else
+            return true;
     }
 
 }

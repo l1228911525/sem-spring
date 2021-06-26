@@ -1,5 +1,8 @@
 package org.semspringframework.beans.propertyedit;
 
+/**
+ * edit the property of type number
+ */
 public class NumberPropertyEdit extends AbstractPropertyEdit {
 
     @Override

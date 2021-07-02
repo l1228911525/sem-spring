@@ -3,6 +3,7 @@ package org.semspringframework.beans;
 import org.semspringframework.beans.propertyedit.BooleanPropertyEdit;
 import org.semspringframework.beans.propertyedit.NumberPropertyEdit;
 import org.semspringframework.beans.propertyedit.PropertyEdit;
+import org.semspringframework.beans.propertyedit.StringPropertyEdit;
 
 import java.util.HashMap;
 
@@ -59,6 +60,7 @@ public class PropertyEditRegistrySupport implements PropertyEditRegistry {
         this.registerPropertyEdit(numberPropertyEdit, Float.class);
         this.registerPropertyEdit(numberPropertyEdit, double.class);
         this.registerPropertyEdit(numberPropertyEdit, Double.class);
+        this.registerPropertyEdit(new StringPropertyEdit(), String.class);
     }
 
     public static class TypeConvertSupport {

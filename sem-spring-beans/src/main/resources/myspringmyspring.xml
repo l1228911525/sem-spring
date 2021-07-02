@@ -1,11 +1,7 @@
 <beans>
-    <bean id="test" class="org.semspringframework.beans.factory.Demo">
-        <constructor-arg name="name" value="haha"/>
-    </bean>
-
     <bean id="person" class="pojo.Person">
         <constructor-arg name="name" value="lqyyy"/>
         <constructor-arg name="age" value="12"/>
+        <property name="age" value="18"/>
     </bean>
-
 </beans>

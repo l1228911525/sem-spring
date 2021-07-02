@@ -1,5 +1,6 @@
 package org.semspringframework.beans.factory.support;
 
+import org.semspringframework.beans.BeanWrapperImpl;
 import org.semspringframework.beans.factory.config.AutowireCapableBeanFactory;
 
 import java.lang.reflect.Constructor;
@@ -17,6 +18,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      */
     @Override
     public Object autowireBeanByConstructor(BeanDefinition beanDefinition) {
+
+        BeanWrapperImpl beanWrapper = new BeanWrapperImpl(beanDefinition.getBeanClass());
 
         // create bean using the constructor
         Constructor<?> beanConstructor = beanDefinition.getBeanConstructor();
@@ -39,12 +42,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             }
 
             else{
-                objectList.add(parameterObj);
+                Object newObj = beanWrapper.convert(parameterObj, beanWrapper.getPropertyClass(parameterName));
+                objectList.add(newObj);
             }
         }
 
         try {
-            return beanConstructor.newInstance(objectList.toArray());
+            beanWrapper.setObject(beanConstructor.newInstance(objectList.toArray()));
+            return beanWrapper;
         } catch (Exception e) {
             throw new IllegalStateException("creating bean named " + beanDefinition.getBeanName() + " happen Exception usring the constructor");
         }
@@ -55,16 +60,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      * DI(Dependency injection) using set method of target
      */
     @Override
-    public Object autowireBeanBySet(BeanDefinition beanDefinition, Object target) {
+    public BeanWrapperImpl autowireBeanBySet(BeanDefinition beanDefinition, BeanWrapperImpl beanWrapper) {
 
         Object parameterObject = null;
-
-        String setMethodName = null;
 
         HashMap<String, Object> setParam = beanDefinition.getSetParam();
 
         if(setParam == null)
-            return target;
+            return beanWrapper;
 
         Set<String> keySet = setParam.keySet();
 
@@ -82,34 +85,20 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                 parameterObject = param;
             }
 
-            setMethodName = "set" + key.substring(0, 1).toUpperCase() + key.substring(1);
-
-            try {
-                Method method = beanDefinition.getBeanClass().getDeclaredMethod(setMethodName, parameterObject.getClass());
-
-                method.invoke(target, parameterObject);
-
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-                throw new IllegalStateException("fail to invoke the method named "+setMethodName+" of target");
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-                throw new IllegalStateException("fail to invoke the method named "+setMethodName+" of target");
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-                throw new IllegalStateException("fail to invoke the method named "+setMethodName+" of target");
-            }
+            beanWrapper.setPropertyValue(key, parameterObject);
 
         }
 
-        return target;
+        return beanWrapper;
     }
 
     @Override
     public Object createBean(String beanName, BeanDefinition beanDefinition) {
 
-        Object constructorObj = autowireBeanByConstructor(beanDefinition);
+        Object beanWrapper = autowireBeanByConstructor(beanDefinition);
 
-        return autowireBeanBySet(beanDefinition, constructorObj);
+        BeanWrapperImpl beanWrapperSet = autowireBeanBySet(beanDefinition, (BeanWrapperImpl) beanWrapper);
+
+        return beanWrapperSet.getObject();
     }
 }

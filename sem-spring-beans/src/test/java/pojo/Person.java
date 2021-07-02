@@ -6,6 +6,8 @@ public class Person {
 
     private Integer age;
 
+    public String haha = "lqyyy";
+
     public Person() {
     }
 

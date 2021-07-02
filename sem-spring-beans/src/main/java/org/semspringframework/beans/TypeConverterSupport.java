@@ -2,6 +2,10 @@ package org.semspringframework.beans;
 
 import org.semspringframework.beans.propertyedit.PropertyEdit;
 
+/**
+ * the support implement {@link TypeConverter} that hold the ability of converting property type
+ * using PropertyEdit
+ */
 public class TypeConverterSupport extends PropertyEditRegistrySupport implements TypeConverter {
 
     public TypeConverterSupport() {

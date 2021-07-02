@@ -1,5 +1,6 @@
 package org.semspringframework.beans.factory.config;
 
+import org.semspringframework.beans.BeanWrapperImpl;
 import org.semspringframework.beans.factory.support.BeanDefinition;
 
 /**
@@ -15,6 +16,6 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
     /**
      * autowire a bean by the function of 'set'
      */
-    public Object autowireBeanBySet(BeanDefinition beanDefinition, Object object);
+    public BeanWrapperImpl autowireBeanBySet(BeanDefinition beanDefinition, BeanWrapperImpl beanWrapper);
 
 }

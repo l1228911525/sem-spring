@@ -25,7 +25,7 @@ public class DefaultListableBeanFactoryTest {
         beanDefinition.setBeanConstructor(Person.class.getConstructor(String.class, Integer.class));
         HashMap<String, Object> initMap = new HashMap<String, Object>();
         initMap.put("name", "lqyyy");
-        initMap.put("age", 18);
+        initMap.put("age", "18");
         beanDefinition.setInitParam(initMap);
         beanDefinition.setConstructorParameter(new String[]{"name", "age"});
         beanDefinition.setSingleton(false);
@@ -37,7 +37,7 @@ public class DefaultListableBeanFactoryTest {
         beanDefinition.setBeanConstructor(Person.class.getConstructor(String.class, Integer.class));
         HashMap<String, Object> initMapPerson2 = new HashMap<String, Object>();
         initMapPerson2.put("name", "lll");
-        initMapPerson2.put("age", 12);
+        initMapPerson2.put("age", "12");
         beanDefinition.setInitParam(initMapPerson2);
         beanDefinition.setConstructorParameter(new String[]{"name", "age"});
         beanDefinition.setSingleton(false);

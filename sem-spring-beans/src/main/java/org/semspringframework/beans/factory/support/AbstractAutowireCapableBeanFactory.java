@@ -97,6 +97,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
         Object beanWrapper = autowireBeanByConstructor(beanDefinition);
 
+        if(beanDefinition.getSingleton()) {
+            registerSingleton(beanDefinition.getBeanName(), ((BeanWrapperImpl)beanWrapper).getObject());
+        }
+
         BeanWrapperImpl beanWrapperSet = autowireBeanBySet(beanDefinition, (BeanWrapperImpl) beanWrapper);
 
         return beanWrapperSet.getObject();

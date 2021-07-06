@@ -1,7 +1,10 @@
 <beans>
-    <bean id="person" class="pojo.Person">
-        <constructor-arg name="name" value="lqyyy"/>
-        <constructor-arg name="age" value="12"/>
-        <property name="age" value="18"/>
+    <bean id="person" class="pojo.Person" singleton="true">
+        <property name="user" ref="user"/>
     </bean>
+
+    <bean id="user" class="pojo.User" singleton="true">
+        <property name="person" ref="person"/>
+    </bean>
+
 </beans>

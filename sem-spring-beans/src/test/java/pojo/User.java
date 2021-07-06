@@ -2,13 +2,13 @@ package pojo;
 
 public class User {
 
-    private Person person;
+    private Yart yart;
 
-    public Person getPerson() {
-        return person;
+    public Yart getYart() {
+        return yart;
     }
 
-    public void setPerson(Person person) {
-        this.person = person;
+    public void setYart(Yart yart) {
+        this.yart = yart;
     }
 }

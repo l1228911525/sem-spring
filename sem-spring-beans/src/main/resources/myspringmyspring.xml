@@ -1,9 +1,21 @@
 <beans>
+<!--    <bean id="person" class="pojo.Person" singleton="true">-->
+<!--        <property name="user" ref="user"/>-->
+<!--    </bean>-->
+
+<!--    <bean id="user" class="pojo.User" singleton="true">-->
+<!--        <property name="person" ref="person"/>-->
+<!--    </bean>-->
+
     <bean id="person" class="pojo.Person" singleton="true">
         <property name="user" ref="user"/>
     </bean>
 
     <bean id="user" class="pojo.User" singleton="true">
+        <property name="yart" ref="yart"/>
+    </bean>
+
+    <bean id="yart" class="pojo.Yart" singleton="true">
         <property name="person" ref="person"/>
     </bean>
 

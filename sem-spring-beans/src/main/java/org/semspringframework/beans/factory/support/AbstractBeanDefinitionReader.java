@@ -2,7 +2,6 @@ package org.semspringframework.beans.factory.support;
 
 import org.semspringframework.beans.factory.config.BeanDefinitionReader;
 import org.semspringframework.beans.factory.config.BeanDefinitionRegistry;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;

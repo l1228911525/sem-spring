@@ -60,13 +60,13 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
-            System.out.println("fail to parse document");
+            throw new IllegalStateException("fail to parse document");
         } catch (SAXException e) {
             e.printStackTrace();
-            System.out.println("fail to parse document");
+            throw new IllegalStateException("fail to parse document");
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("fail to parse document");
+            throw new IllegalStateException("fail to parse document");
         }
     }
 

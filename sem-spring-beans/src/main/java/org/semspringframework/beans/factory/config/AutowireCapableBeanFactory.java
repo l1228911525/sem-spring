@@ -9,13 +9,19 @@ import org.semspringframework.beans.factory.support.BeanDefinition;
  */
 public interface AutowireCapableBeanFactory extends BeanFactory {
     /**
-     * create and autowire a bean by constructor using BeanDefinition
+     * the method create and autowire a bean by constructor using BeanDefinition
      */
     public Object autowireBeanByConstructor(BeanDefinition beanDefinition);
 
     /**
-     * autowire a bean by the function of 'set'
+     * autowire a bean by the function named 'set'
      */
     public BeanWrapperImpl autowireBeanBySet(BeanDefinition beanDefinition, BeanWrapperImpl beanWrapper);
+
+    /**
+     * initialize bean after the method named 'autowireBeanBySet'.
+     * Operation include executing the method of class named BeanPostProcessor and the method of class named Aware.
+     */
+    public Object initializeBean(Object bean, String beanName);
 
 }

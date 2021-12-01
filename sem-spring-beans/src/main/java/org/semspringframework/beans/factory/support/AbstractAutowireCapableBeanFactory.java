@@ -1,6 +1,9 @@
 package org.semspringframework.beans.factory.support;
 
 import org.semspringframework.beans.BeanWrapperImpl;
+import org.semspringframework.beans.factory.Aware;
+import org.semspringframework.beans.factory.BeanFactoryAware;
+import org.semspringframework.beans.factory.BeanPostProcessor;
 import org.semspringframework.beans.factory.config.AutowireCapableBeanFactory;
 
 import java.lang.reflect.Constructor;
@@ -103,6 +106,35 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
         BeanWrapperImpl beanWrapperSet = autowireBeanBySet(beanDefinition, (BeanWrapperImpl) beanWrapper);
 
-        return beanWrapperSet.getObject();
+        Object bean = beanWrapperSet.getObject();
+
+        return initializeBean(bean, beanName);
+    }
+
+    @Override
+    public Object initializeBean(Object bean, String beanName) {
+
+        invokeAwareMethod(bean, beanName);
+
+        // implement method of BeanPostProcessor named PostProcessorBeforeInit
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            bean = beanPostProcessor.PostProcessorBeforeInit(bean, beanName);
+        }
+
+        // TODO initializing bean
+
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            bean = beanPostProcessor.PostProcessorAfterInit(bean,  beanName);
+        }
+
+        return bean;
+    }
+
+    private Object invokeAwareMethod(Object bean, String beanName) {
+
+        if(bean instanceof BeanFactoryAware)
+            ((BeanFactoryAware) bean).setBeanFactory(this);
+
+        return bean;
     }
 }

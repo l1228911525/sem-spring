@@ -1,5 +1,6 @@
 package org.semspringframework.context.event;
 
+import org.semspringframework.context.ApplicationEvent;
 import org.semspringframework.context.ApplicationListener;
 
 /**
@@ -14,5 +15,5 @@ public interface ApplicationContextListener<T extends ApplicationContextEvent> e
      * @param event monitored by the class.
      */
     @Override
-    void onApplicationEvent(T event);
+    void onApplicationEvent(ApplicationEvent event);
 }

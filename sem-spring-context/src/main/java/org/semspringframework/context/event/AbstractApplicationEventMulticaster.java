@@ -6,17 +6,15 @@ import org.semspringframework.beans.factory.support.AbstractBeanFactory;
 import org.semspringframework.context.ApplicationEvent;
 import org.semspringframework.context.ApplicationListener;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * the abstract class manager application listener implementing ApplicationEventMulticaster
  */
 public abstract class AbstractApplicationEventMulticaster implements ApplicationEventMulticaster, BeanFactoryAware {
 
-    Map<String, ApplicationListener<?>> listenerMap = new HashMap<>();
+    private List<ApplicationListener<?>> listenerList = new LinkedList<>();
 
     public AbstractApplicationEventMulticaster() {
     }
@@ -44,12 +42,12 @@ public abstract class AbstractApplicationEventMulticaster implements Application
 
     @Override
     public void addApplicationListener(ApplicationListener<?> listener) {
-        listenerMap.put(listener.getClass().getName(), listener);
+        this.listenerList.add(listener);
     }
 
     @Override
     public void removeApplicationListener(ApplicationListener<?> listener) {
-        listenerMap.remove(listener.getClass().getName());
+        this.listenerList.remove(listener);
     }
 
     @Override
@@ -59,7 +57,11 @@ public abstract class AbstractApplicationEventMulticaster implements Application
 
     @Override
     public void removeAllApplicationListeners() {
-        listenerMap.clear();
+        this.listenerList.clear();
     }
 
+    @Override
+    public List<ApplicationListener<?>> getApplicationListeners() {
+        return this.listenerList;
+    }
 }

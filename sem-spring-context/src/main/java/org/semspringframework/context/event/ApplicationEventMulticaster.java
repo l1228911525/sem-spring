@@ -3,11 +3,15 @@ package org.semspringframework.context.event;
 import org.semspringframework.context.ApplicationEvent;
 import org.semspringframework.context.ApplicationListener;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * application event multicaster
  * manager application listener and multicast event to listener
  */
 public interface ApplicationEventMulticaster {
+
 
     /**
      * add a listener into collection of listener
@@ -31,6 +35,12 @@ public interface ApplicationEventMulticaster {
      * remove all listeners
      */
     public void removeAllApplicationListeners();
+
+    /**
+     * get all listener
+     * @return
+     */
+    public List<ApplicationListener<?>> getApplicationListeners();
 
     /**
      * multicast event to listener

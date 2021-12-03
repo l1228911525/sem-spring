@@ -10,7 +10,7 @@ public class EventPublisherTest {
     public void test0() {
         SimpleApplicationEventPublisher eventPublisher = new SimpleApplicationEventPublisher();
 
-        eventPublisher.eventMulticaster.addApplicationListener(new ContextStartedListener());
+        eventPublisher.getEventMulticaster().addApplicationListener(new ContextStartedListener());
 
         eventPublisher.publishEvent(new ContextStartedEvent("haha"));
     }

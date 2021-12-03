@@ -6,7 +6,17 @@ import org.semspringframework.context.event.SimpleApplicationEventMulticaster;
 
 public class SimpleApplicationEventPublisher implements ApplicationEventPublisher {
 
-    public SimpleApplicationEventMulticaster eventMulticaster = new SimpleApplicationEventMulticaster();
+    private SimpleApplicationEventMulticaster eventMulticaster = new SimpleApplicationEventMulticaster();
+
+    public SimpleApplicationEventMulticaster getEventMulticaster() {
+        if(null == this.eventMulticaster)
+            throw new IllegalStateException("application event multicaster is null");
+        return this.eventMulticaster;
+    }
+
+    public void setEventMulticaster(SimpleApplicationEventMulticaster eventMulticaster) {
+        this.eventMulticaster = eventMulticaster;
+    }
 
     @Override
     public void publishEvent(ApplicationEvent event) {

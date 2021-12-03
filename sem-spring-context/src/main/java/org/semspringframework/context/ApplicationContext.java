@@ -2,6 +2,7 @@ package org.semspringframework.context;
 
 import org.semspringframework.beans.factory.config.BeanFactory;
 import org.semspringframework.beans.factory.config.ListableBeanFactory;
+import org.semspringframework.beans.factory.support.DefaultListableBeanFactory;
 
 /**
  * a class implement the interface{@link ApplicationContext} surface the class hold a few ability of managing BeanFactory,
@@ -48,7 +49,7 @@ public interface ApplicationContext extends ListableBeanFactory, ApplicationEven
     /**
      * register BeanPostProcess to application context
      */
-    public void registerBeanPostProcessors(BeanFactory beanFactory);
+    public void registerBeanPostProcessors(DefaultListableBeanFactory beanFactory);
 
     /**
      * initialize event multicaster of application event.
@@ -58,12 +59,12 @@ public interface ApplicationContext extends ListableBeanFactory, ApplicationEven
     /**
      * register application listener to application context
      */
-    public void registerListener();
+    public void registerListener(ListableBeanFactory beanFactory);
 
     /**
      * create singleton bean and put into singleton cache
      */
-    public void finishSingletonBean();
+    public void finishSingletonBean(DefaultListableBeanFactory beanFactory);
 
     /**
      * finish refresh: publish refreshed event

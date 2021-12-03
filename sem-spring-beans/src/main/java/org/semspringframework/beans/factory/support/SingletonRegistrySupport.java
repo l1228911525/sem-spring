@@ -37,6 +37,9 @@ public class SingletonRegistrySupport implements SingletonRegistry {
             ObjectFactory objectFactory = objectFactoryMap.get(beanName);
 
             result = objectFactory != null ? objectFactory.getObject() : null;
+
+            if(null != result)
+                registerSingleton(beanName, result);
         }
 
         return result;

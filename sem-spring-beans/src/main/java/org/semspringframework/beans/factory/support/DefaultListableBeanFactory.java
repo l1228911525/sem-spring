@@ -1,8 +1,14 @@
 package org.semspringframework.beans.factory.support;
 
-import java.util.HashMap;
+import org.semspringframework.beans.factory.BeanPostProcessor;
+import org.semspringframework.beans.factory.config.ListableBeanFactory;
 
-public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory {
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory implements ListableBeanFactory {
 
     private HashMap<String, BeanDefinition> beanDefinitionMap = new HashMap<>();
 
@@ -34,7 +40,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     }
 
     @Override
-    public Integer getBeanDefinitionCount() {
+    public Integer getBeanDefinitionCounts() {
         return beanDefinitionMap.size();
     }
 
@@ -46,5 +52,29 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
     public void setBeanDefinitionMap(HashMap<String, BeanDefinition> beanDefinitionMap) {
         this.beanDefinitionMap = beanDefinitionMap;
+    }
+
+    @Override
+    public String[] getBeanDefintionNamesForClass(Class<?> beanClass) {
+        return new String[0];
+    }
+
+    @Override
+    public List<String> getBeanNamesForType(Class<?> baseClazz, Boolean rejectSubClass) {
+
+        List<String> beanNames = new LinkedList<>();
+
+        Set<String> keys = this.beanDefinitionMap.keySet();
+
+        for (String key : keys) {
+            BeanDefinition beanDefinition = this.beanDefinitionMap.get(key);
+            Class<?> beanClass = beanDefinition.getBeanClass();
+
+            if(baseClazz.isAssignableFrom(beanClass) && !rejectSubClass)
+                beanNames.add(beanDefinition.getBeanName());
+            else if(rejectSubClass && baseClazz.equals(beanClass))
+                beanNames.add(beanDefinition.getBeanName());
+        }
+        return beanNames;
     }
 }

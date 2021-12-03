@@ -26,14 +26,4 @@ public interface BeanDefinitionRegistry {
      */
     public Boolean containsBeanDefinition(String beanDefinitionName);
 
-    /**
-     * getting name of BeanDefinitions
-     */
-    public String[] getBeanDefinitionNames();
-
-    /**
-     * getting count of BeanDefinitions
-     */
-    public Integer getBeanDefinitionCount();
-
 }

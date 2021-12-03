@@ -7,7 +7,12 @@
 <!--        <property name="person" ref="person"/>-->
 <!--    </bean>-->
 
-    <bean id="initBean" class="pojo.InitBean"/>
+<!--    <bean id="initBean" class="pojo.InitBean"/>-->
 
-    <bean id="beanPostProcessor" class="pojo.InitBeanPostProcessor"/>
+<!--    <bean id="beanPostProcessor" class="pojo.InitBeanPostProcessor"/>-->
+
+    <bean id="subClass1" class="pojo.SubClass"/>
+
+    <bean id="subClass2" class="pojo.SubClass2"/>
+
 </beans>

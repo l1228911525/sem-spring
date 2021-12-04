@@ -20,7 +20,7 @@ public interface ApplicationContext extends ListableBeanFactory, ApplicationEven
      * get the BeanFactory the application context manager
      * @return
      */
-    public ListableBeanFactory getBeanFactory();
+    public DefaultListableBeanFactory getBeanFactory();
 
     /**
      * judge BeanFactory is null or not

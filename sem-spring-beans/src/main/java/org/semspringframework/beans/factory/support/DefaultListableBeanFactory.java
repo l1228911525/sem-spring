@@ -36,7 +36,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
     @Override
     public String[] getBeanDefinitionNames() {
-        return (String[]) beanDefinitionMap.keySet().toArray();
+        Set<String> beanDefinitionNameSet = beanDefinitionMap.keySet();
+        return beanDefinitionNameSet.toArray(new String[beanDefinitionNameSet.size()]);
     }
 
     @Override

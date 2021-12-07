@@ -48,7 +48,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
     }
 
     @Override
-    public void loadBeanDefinition(String... locations) {
+    public void loadBeanDefinition(String...locations) {
 
         if(locations == null)
             return;

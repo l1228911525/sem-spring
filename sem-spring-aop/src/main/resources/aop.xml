@@ -1,0 +1,9 @@
+<beans>
+    <aopconfig id="config1">
+        <aoppointcut id="pointcut" expression="execution(* com.liao.springAOP.service.impl.*.*(..))"/>
+        <aopaspect id="aspect" ref="transactionDemo">
+            <aopbefore method="startTransaction" pointcut-ref="pointcut"/>
+            <aopafter method="commitTransaction" pointcut-ref="pointcut"/>
+        </aopaspect>
+    </aopconfig>
+</beans>

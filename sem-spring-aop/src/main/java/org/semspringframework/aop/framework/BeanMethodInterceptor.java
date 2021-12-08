@@ -7,6 +7,9 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * the concrete realization of the proxy class
+ */
 public class BeanMethodInterceptor implements MethodInterceptor {
 
     private List<BeanAdvice> beanAdviceList = new LinkedList<>();
@@ -14,6 +17,7 @@ public class BeanMethodInterceptor implements MethodInterceptor {
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
 
+        // run pre-enhanced method
         for (BeanAdvice beanAdvice : beanAdviceList) {
             List<Method> beforeMethods = beanAdvice.getBeforeMethod();
 
@@ -22,9 +26,10 @@ public class BeanMethodInterceptor implements MethodInterceptor {
             }
         }
 
+        // proxyed bean method
         Object o = methodProxy.invokeSuper(obj, args);
 
-
+        // run post-enhanced method
         for (BeanAdvice beanAdvice : beanAdviceList) {
             List<Method> afterMethods = beanAdvice.getAfterMethod();
 

@@ -1,7 +1,8 @@
 package org.semspringframework.aop.framework;
 
 /**
- * after advice object
+ * after advice class
+ * configuration class
  */
 public class AfterAdvice {
 

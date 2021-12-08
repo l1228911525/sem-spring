@@ -3,6 +3,7 @@ package org.semspringframework.aop.config;
 import org.semspringframework.aop.framework.*;
 import org.semspringframework.beans.factory.config.SingletonRegistry;
 import org.semspringframework.beans.factory.parsing.DocumentParsing;
+import org.semspringframework.beans.factory.support.BeanDefinition;
 import org.semspringframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
@@ -87,6 +88,11 @@ public class XmlAopConfigParse implements AopConfigParse {
         AdviceConfig adviceConfig = (AdviceConfig)singletonRegistry.getSingleton(ADVICECONFIG);
 
         if(adviceConfig == null) {
+            BeanDefinition beanDefinition = new BeanDefinition();
+            beanDefinition.setSingleton(true);
+            beanDefinition.setBeanName(ADVICECONFIG);
+            beanDefinition.setBeanClass(AdviceConfig.class);
+            ((DefaultListableBeanFactory) singletonRegistry).registerBeanDefinition(ADVICECONFIG, beanDefinition);
             adviceConfig = new AdviceConfig();
             this.singletonRegistry.registerSingleton(ADVICECONFIG, adviceConfig);
         }
@@ -192,21 +198,4 @@ public class XmlAopConfigParse implements AopConfigParse {
             throw new RuntimeException(e.getMessage());
         }
     }
-
-    public static void main(String[] args) {
-
-        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
-
-        XmlAopConfigParse aopConfigParse = new XmlAopConfigParse(beanFactory);
-
-        aopConfigParse.parseXmlAopFile("aop.xml");
-
-        System.out.println(beanFactory);
-
-        AdviceConfig adviceConfig = (AdviceConfig)beanFactory.getBean(aopConfigParse.ADVICECONFIG);
-
-        System.out.println(adviceConfig);
-
-    }
-
 }

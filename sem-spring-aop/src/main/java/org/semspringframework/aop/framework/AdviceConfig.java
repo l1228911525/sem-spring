@@ -1,8 +1,13 @@
 package org.semspringframework.aop.framework;
 
+import org.semspringframework.beans.factory.support.DefaultListableBeanFactory;
+
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * whole aop configuration class
+ */
 public class AdviceConfig {
 
     List<Pointcut> pointcutList = new LinkedList<>();
@@ -41,7 +46,7 @@ public class AdviceConfig {
         return aspectList;
     }
 
-    public List<BeanAdvice> getBeanAdvice(Class<?> clazz) {
+    public List<BeanAdvice> getBeanAdvice(Class<?> clazz, DefaultListableBeanFactory beanFactory) {
 
         List<BeanAdvice> beanAdviceList = new LinkedList<>();
 
@@ -49,7 +54,11 @@ public class AdviceConfig {
 
             BeanAdvice beanAdvice = new BeanAdvice();
 
-            beanAdvice.setAdviceObj(aspect.getRef());
+            String aspectRef = aspect.getRef();
+
+            Object aspectBean = beanFactory.getBean(aspectRef);
+
+            beanAdvice.setAdviceObj(aspectBean);
 
             List<BeforeAdvice> beforeAdviceList = aspect.getBeforeAdviceList();
 
@@ -67,7 +76,10 @@ public class AdviceConfig {
 
                     if(judgeResult) {
                         try {
-                            beanAdvice.addBeforeMethod(aspect.getRef().getClass().getMethod(beforeAdvice.getMethod()));
+
+                            Object aspectObj = beanFactory.getBean(aspect.getRef());
+
+                            beanAdvice.addBeforeMethod(aspectObj.getClass().getMethod(beforeAdvice.getMethod()));
                         } catch (NoSuchMethodException e) {
                             throw new RuntimeException(e.getMessage());
                         }
@@ -80,7 +92,7 @@ public class AdviceConfig {
 
                     if(judgeResult) {
                         try {
-                            beanAdvice.addBeforeMethod(aspect.getRef().getClass().getMethod(beforeAdvice.getMethod()));
+                            beanAdvice.addBeforeMethod(aspectBean.getClass().getMethod(beforeAdvice.getMethod()));
                         } catch (NoSuchMethodException e) {
                             throw new RuntimeException(e.getMessage());
                         }
@@ -103,7 +115,7 @@ public class AdviceConfig {
 
                     if(judgeResult) {
                         try {
-                            beanAdvice.addBeforeMethod(aspect.getRef().getClass().getMethod(afterAdvice.getMethod()));
+                            beanAdvice.addAfterMethod(aspect.getRef().getClass().getMethod(afterAdvice.getMethod()));
                         } catch (NoSuchMethodException e) {
                             throw new RuntimeException(e.getMessage());
                         }
@@ -116,7 +128,7 @@ public class AdviceConfig {
 
                     if(judgeResult) {
                         try {
-                            beanAdvice.addBeforeMethod(aspect.getRef().getClass().getMethod(afterAdvice.getMethod()));
+                            beanAdvice.addAfterMethod(aspectBean.getClass().getMethod(afterAdvice.getMethod()));
                         } catch (NoSuchMethodException e) {
                             throw new RuntimeException(e.getMessage());
                         }

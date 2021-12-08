@@ -3,6 +3,9 @@ package org.semspringframework.aop.framework;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * aspect class
+ */
 public class Aspect {
 
     private String id;

@@ -10,14 +10,17 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * if a class implement the interface{@link AopUtils}, it hold a ability of generating proxy object for {@param bean}
+ * aop utils, it hold the function:
+ * 1.generate proxy object
+ * 2.judge whether a class meets the expression
  */
 public class AopUtils {
 
     private static final Set<PointcutPrimitive> SUPPORTED_PRIMITIVES = new HashSet<PointcutPrimitive>();
 
-    private static PointcutParser pointcutParser = PointcutParser.getPointcutParserSupportingSpecifiedPrimitivesAndUsingSpecifiedClassLoaderForResolution(SUPPORTED_PRIMITIVES, AopUtils.class.getClassLoader());
-
+    static {
+        SUPPORTED_PRIMITIVES.add(PointcutPrimitive.EXECUTION);
+    }
 
     public static Object getProxy(Object bean, List<BeanAdvice> beanAdviceList) {
 
@@ -37,7 +40,11 @@ public class AopUtils {
 
     public static Boolean judgePointcutAndClass(String expression, Class<?> clazz) {
 
-        return pointcutParser.parsePointcutExpression(expression).couldMatchJoinPointsInType(clazz);
+        PointcutParser pointcutParser = PointcutParser.getPointcutParserSupportingSpecifiedPrimitivesAndUsingSpecifiedClassLoaderForResolution(SUPPORTED_PRIMITIVES, AopUtils.class.getClassLoader());
+
+        boolean b = pointcutParser.parsePointcutExpression(expression).couldMatchJoinPointsInType(clazz);
+
+        return b;
 
     }
 

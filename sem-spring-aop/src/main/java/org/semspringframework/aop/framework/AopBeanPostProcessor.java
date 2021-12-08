@@ -7,6 +7,9 @@ import org.semspringframework.beans.factory.support.DefaultListableBeanFactory;
 
 import java.util.List;
 
+/**
+ * aop bean post processor, generate proxy object if  need
+ */
 public class AopBeanPostProcessor implements BeanPostProcessor, BeanFactoryAware {
 
     private DefaultListableBeanFactory beanFactory;
@@ -21,7 +24,7 @@ public class AopBeanPostProcessor implements BeanPostProcessor, BeanFactoryAware
 
         AdviceConfig adviceConfig = (AdviceConfig)beanFactory.getBean("adviceConfig");
 
-        List<BeanAdvice> beanAdviceList = adviceConfig.getBeanAdvice(bean.getClass());
+        List<BeanAdvice> beanAdviceList = adviceConfig.getBeanAdvice(bean.getClass(), beanFactory);
 
         if(beanAdviceList.size() == 0)
             return bean;

@@ -41,4 +41,97 @@ public class AdviceConfig {
         return aspectList;
     }
 
+    public List<BeanAdvice> getBeanAdvice(Class<?> clazz) {
+
+        List<BeanAdvice> beanAdviceList = new LinkedList<>();
+
+        for (Aspect aspect : this.aspectList) {
+
+            BeanAdvice beanAdvice = new BeanAdvice();
+
+            beanAdvice.setAdviceObj(aspect.getRef());
+
+            List<BeforeAdvice> beforeAdviceList = aspect.getBeforeAdviceList();
+
+            List<AfterAdvice> afterAdviceList = aspect.getAfterAdviceList();
+
+            for (BeforeAdvice beforeAdvice : beforeAdviceList) {
+
+                String pointcut = beforeAdvice.getPointcut();
+
+                String pointcutRef = beforeAdvice.getPointcutRef();
+
+                if(pointcut != null && !"".equals(pointcut)) {
+
+                    Boolean judgeResult = AopUtils.judgePointcutAndClass(pointcut, clazz);
+
+                    if(judgeResult) {
+                        try {
+                            beanAdvice.addBeforeMethod(aspect.getRef().getClass().getMethod(beforeAdvice.getMethod()));
+                        } catch (NoSuchMethodException e) {
+                            throw new RuntimeException(e.getMessage());
+                        }
+                    }
+                } else if(pointcutRef != null && !"".equals(pointcutRef)) {
+
+                    Pointcut pointcutObj = this.getPointcutById(pointcutRef);
+
+                    Boolean judgeResult = AopUtils.judgePointcutAndClass(pointcutObj.getExpression(), clazz);
+
+                    if(judgeResult) {
+                        try {
+                            beanAdvice.addBeforeMethod(aspect.getRef().getClass().getMethod(beforeAdvice.getMethod()));
+                        } catch (NoSuchMethodException e) {
+                            throw new RuntimeException(e.getMessage());
+                        }
+                    }
+
+                }
+
+            }
+
+
+            for (AfterAdvice afterAdvice : afterAdviceList) {
+
+                String pointcut = afterAdvice.getPointcut();
+
+                String pointcutRef = afterAdvice.getPointcutRef();
+
+                if(pointcut != null && !"".equals(pointcut)) {
+
+                    Boolean judgeResult = AopUtils.judgePointcutAndClass(pointcut, clazz);
+
+                    if(judgeResult) {
+                        try {
+                            beanAdvice.addBeforeMethod(aspect.getRef().getClass().getMethod(afterAdvice.getMethod()));
+                        } catch (NoSuchMethodException e) {
+                            throw new RuntimeException(e.getMessage());
+                        }
+                    }
+                } else if(pointcutRef != null && !"".equals(pointcutRef)) {
+
+                    Pointcut pointcutObj = this.getPointcutById(pointcutRef);
+
+                    Boolean judgeResult = AopUtils.judgePointcutAndClass(pointcutObj.getExpression(), clazz);
+
+                    if(judgeResult) {
+                        try {
+                            beanAdvice.addBeforeMethod(aspect.getRef().getClass().getMethod(afterAdvice.getMethod()));
+                        } catch (NoSuchMethodException e) {
+                            throw new RuntimeException(e.getMessage());
+                        }
+                    }
+
+                }
+
+            }
+
+            if(beanAdvice.getBeforeMethod().size() != 0 || beanAdvice.getAfterMethod().size() != 0)
+                beanAdviceList.add(beanAdvice);
+        }
+
+        return beanAdviceList;
+
+    }
+
 }

@@ -4,7 +4,6 @@ import org.semspringframework.aop.framework.*;
 import org.semspringframework.beans.factory.config.SingletonRegistry;
 import org.semspringframework.beans.factory.parsing.DocumentParsing;
 import org.semspringframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -24,7 +23,6 @@ import java.util.List;
 /**
  * parse xml file to obtain aop bean and register it to BeanFactory
  */
-// todo parsing xml node appear null pointer exception
 public class XmlAopConfigParse implements AopConfigParse {
 
     String AOPCONFIG = "aopconfig";
@@ -36,6 +34,8 @@ public class XmlAopConfigParse implements AopConfigParse {
     String AOPBEFORE = "aopbefore";
 
     String AOPAFTER = "aopafter";
+
+    String ADVICECONFIG = "adviceConfig";
 
     private SingletonRegistry singletonRegistry;
 
@@ -83,6 +83,14 @@ public class XmlAopConfigParse implements AopConfigParse {
     }
 
     public void doParseXmlAopFile(InputStream inputStream) {
+
+        AdviceConfig adviceConfig = (AdviceConfig)singletonRegistry.getSingleton(ADVICECONFIG);
+
+        if(adviceConfig == null) {
+            adviceConfig = new AdviceConfig();
+            this.singletonRegistry.registerSingleton(ADVICECONFIG, adviceConfig);
+        }
+
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
         try {
@@ -103,13 +111,14 @@ public class XmlAopConfigParse implements AopConfigParse {
 
                     NamedNodeMap attributes = appointcut.getAttributes();
 
-                    String id = attributes.getNamedItem("id").getNodeValue();
+                    String id = DocumentParsing.judgeNodeNullState(attributes.getNamedItem("id"));
 
-                    String expression = attributes.getNamedItem("expression").getNodeValue();
+                    String expression = DocumentParsing.judgeNodeNullState(attributes.getNamedItem("expression"));
 
                     Pointcut pointcut = new Pointcut(id, expression);
 
-                    this.singletonRegistry.registerSingleton(id,pointcut);
+                    adviceConfig.addPointcut(pointcut);
+
                 }
 
                 // parse AOPASPECT
@@ -121,56 +130,56 @@ public class XmlAopConfigParse implements AopConfigParse {
 
                     NamedNodeMap attributes = aopaspect.getAttributes();
 
-                    String id = attributes.getNamedItem("id").getNodeValue();
+                    String id = DocumentParsing.judgeNodeNullState(attributes.getNamedItem("id"));
 
-                    String ref = attributes.getNamedItem("ref").getNodeValue();
+                    String ref = DocumentParsing.judgeNodeNullState(attributes.getNamedItem("ref"));
 
                     aspect.setId(id);
 
                     aspect.setRef(ref);
 
-                    List<Node> aopBeforeList = DocumentParsing.getNodeListByNode(aopaspect, new String[]{"aopbefore"});
+                    List<Node> aopBeforeList = DocumentParsing.getNodeListByNode(aopaspect, new String[]{AOPBEFORE});
 
                     for (Node aopBefore : aopBeforeList) {
                         NamedNodeMap aopBeforeAttributes = aopBefore.getAttributes();
 
-                        String method = aopBeforeAttributes.getNamedItem("method").getNodeValue();
+                        String method = DocumentParsing.judgeNodeNullState(aopBeforeAttributes.getNamedItem("method"));
 
-                        String prointcutRef = aopBeforeAttributes.getNamedItem("pointcut-ref").getNodeValue();
+                        String pointcutRef = DocumentParsing.judgeNodeNullState(aopBeforeAttributes.getNamedItem("pointcut-ref"));
 
-                        String pointcut = aopBeforeAttributes.getNamedItem("pointcut").getNodeValue();
+                        String pointcut = DocumentParsing.judgeNodeNullState(aopBeforeAttributes.getNamedItem("pointcut"));
 
                         BeforeAdvice beforeAdvice = new BeforeAdvice();
 
                         beforeAdvice.setMethod(method);
                         beforeAdvice.setPointcut(pointcut);
-                        beforeAdvice.setPointcutRef(prointcutRef);
+                        beforeAdvice.setPointcutRef(pointcutRef);
 
                         aspect.addBeforeAdvice(beforeAdvice);
                     }
 
                     // after
-                    List<Node> aopAfterList = DocumentParsing.getNodeListByNode(aopaspect, new String[]{"aopafter"});
+                    List<Node> aopAfterList = DocumentParsing.getNodeListByNode(aopaspect, new String[]{AOPAFTER});
 
                     for (Node aopAfter : aopAfterList) {
                         NamedNodeMap aopAfterAttributes = aopAfter.getAttributes();
 
-                        String method = aopAfterAttributes.getNamedItem("method").getNodeValue();
+                        String method = DocumentParsing.judgeNodeNullState(aopAfterAttributes.getNamedItem("method"));
 
-                        String prointcutRef = aopAfterAttributes.getNamedItem("pointcut-ref").getNodeValue();
+                        String pointcutRef = DocumentParsing.judgeNodeNullState(aopAfterAttributes.getNamedItem("pointcut-ref"));
 
-                        String pointcut = aopAfterAttributes.getNamedItem("pointcut").getNodeValue();
+                        String pointcut = DocumentParsing.judgeNodeNullState(aopAfterAttributes.getNamedItem("pointcut"));
 
                         AfterAdvice afterAdvice = new AfterAdvice();
 
                         afterAdvice.setMethod(method);
                         afterAdvice.setPointcut(pointcut);
-                        afterAdvice.setPointcutRef(prointcutRef);
+                        afterAdvice.setPointcutRef(pointcutRef);
 
                         aspect.addAfterAdvice(afterAdvice);
                     }
 
-                    singletonRegistry.registerSingleton(aspect.getId(), aspect);
+                    adviceConfig.addAspect(aspect);
 
                 }
             }
@@ -191,6 +200,12 @@ public class XmlAopConfigParse implements AopConfigParse {
         XmlAopConfigParse aopConfigParse = new XmlAopConfigParse(beanFactory);
 
         aopConfigParse.parseXmlAopFile("aop.xml");
+
+        System.out.println(beanFactory);
+
+        AdviceConfig adviceConfig = (AdviceConfig)beanFactory.getBean(aopConfigParse.ADVICECONFIG);
+
+        System.out.println(adviceConfig);
 
     }
 

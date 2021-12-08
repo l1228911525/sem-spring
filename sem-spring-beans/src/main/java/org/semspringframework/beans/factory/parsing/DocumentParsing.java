@@ -60,4 +60,10 @@ public class DocumentParsing {
         return attributeMap;
     }
 
+    public static String judgeNodeNullState(Node node) {
+        if(null == node)
+            return null;
+        return node.getNodeValue();
+    }
+
 }
